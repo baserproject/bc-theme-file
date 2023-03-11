@@ -41,14 +41,14 @@ class ThemeFilesController extends BcApiController
             $data['fullpath'] = $service->getFullpath($data['theme'], $data['plugin'], $data['type'], $data['path']);
             $form = $service->create($data);
             $entity = $service->get($form->getData('fullpath'));
-            $message = __d('baser', 'ファイル「{0}」を作成しました。', $entity->name);
+            $message = __d('baser_core', 'ファイル「{0}」を作成しました。', $entity->name);
         } catch (BcFormFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
-            $errors = $e->getForm()->getErrors();
-            $message = __d('baser', '入力エラーです。内容を修正してください。' . $e->getMessage());
+            $message = __d('baser_core', '入力エラーです。内容を修正してください。');
+            $errors = $e->getEntity()->getErrors();
         } catch (\Throwable $e) {
-            $this->setResponse($this->response->withStatus(400));
-            $message = __d('baser', '処理中にエラーが発生しました。');
+            $this->setResponse($this->response->withStatus(500));
+            $message = __d('baser_core', '処理中にエラーが発生しました。' . $e->getMessage());
         }
 
         $this->set([
@@ -76,14 +76,14 @@ class ThemeFilesController extends BcApiController
             $data['fullpath'] = $service->getFullpath($data['theme'], $data['plugin'], $data['type'], $data['path']);
             $themeFileForm = $service->update($data);
             $entity = $service->get($themeFileForm->getData('fullpath'));
-            $message = __d('baser', 'ファイル「{0}」を更新しました。', $entity->name);
+            $message = __d('baser_core', 'ファイル「{0}」を更新しました。', $entity->name);
         } catch (BcFormFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
-            $errors = $e->getForm()->getErrors();
-            $message = __d('baser', '入力エラーです。内容を修正してください。' . $e->getMessage());
+            $message = __d('baser_core', '入力エラーです。内容を修正してください。');
+            $errors = $e->getEntity()->getErrors();
         } catch (\Throwable $e) {
-            $this->setResponse($this->response->withStatus(400));
-            $message = __d('baser', '処理中にエラーが発生しました。');
+            $this->setResponse($this->response->withStatus(500));
+            $message = __d('baser_core', '処理中にエラーが発生しました。' . $e->getMessage());
         }
 
         $this->set([
@@ -111,25 +111,20 @@ class ThemeFilesController extends BcApiController
             $data['fullpath'] = $service->getFullpath($data['theme'], $data['plugin'], $data['type'], $data['path']);
             $themeFile = $service->get($data['fullpath'])->toArray();
             if ($service->delete($data['fullpath'])) {
-                $message = __d('baser', 'ファイル「{0}」を削除しました。', $data['path']);
+                $message = __d('baser_core', 'ファイル「{0}」を削除しました。', $data['path']);
             } else {
-                $message = __d('baser', 'ファイル「{0}」の削除に失敗しました。', $data['path']);
+                $message = __d('baser_core', 'ファイル「{0}」の削除に失敗しました。', $data['path']);
             }
-        } catch (BcFormFailedException $e) {
-            $this->setResponse($this->response->withStatus(400));
-            $errors = $e->getForm()->getErrors();
-            $message = __d('baser', '入力エラーです。内容を修正してください。' . $e->getMessage());
         } catch (\Throwable $e) {
-            $this->setResponse($this->response->withStatus(400));
-            $message = __d('baser', '処理中にエラーが発生しました。');
+            $this->setResponse($this->response->withStatus(500));
+            $message = __d('baser_core', '処理中にエラーが発生しました。' . $e->getMessage());
         }
 
         $this->set([
             'themeFile' => $themeFile ?? null,
-            'message' => $message,
-            'errors' => $errors ?? null
+            'message' => $message
         ]);
-        $this->viewBuilder()->setOption('serialize', ['message', 'errors']);
+        $this->viewBuilder()->setOption('serialize', ['message']);
     }
 
     /**
@@ -149,25 +144,20 @@ class ThemeFilesController extends BcApiController
             $data['fullpath'] = $service->getFullpath($data['theme'], $data['plugin'], $data['type'], $data['path']);
             $entity = $service->copy($data['fullpath']);
             if ($entity) {
-                $message = __d('baser', 'ファイル「{0}」をコピーしました。', $data['path']);
+                $message = __d('baser_core', 'ファイル「{0}」をコピーしました。', $data['path']);
             } else {
-                $message = __d('baser', 'ファイル「{0}」のコピーに失敗しました。上位フォルダのアクセス権限を見直してください。', $data['path']);
+                $message = __d('baser_core', 'ファイル「{0}」のコピーに失敗しました。上位フォルダのアクセス権限を見直してください。', $data['path']);
             }
-        } catch (BcFormFailedException $e) {
-            $this->setResponse($this->response->withStatus(400));
-            $errors = $e->getForm()->getErrors();
-            $message = __d('baser', '入力エラーです。内容を修正してください。' . $e->getMessage());
         } catch (\Throwable $e) {
-            $this->setResponse($this->response->withStatus(400));
-            $message = __d('baser', '処理中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
+            $message = __d('baser_core', '処理中にエラーが発生しました。' . $e->getMessage());
         }
 
         $this->set([
             'message' => $message,
-            'themeFile' => $entity ?? null,
-            'errors' => $errors ?? null
+            'themeFile' => $entity ?? null
         ]);
-        $this->viewBuilder()->setOption('serialize', ['message', 'themeFile', 'errors']);
+        $this->viewBuilder()->setOption('serialize', ['message', 'themeFile']);
     }
 
     /**
@@ -189,27 +179,22 @@ class ThemeFilesController extends BcApiController
             $data['assets'] = in_array($data['type'], ['css', 'js', 'img']);
             $targetPath = $service->copyToTheme($data);
             $currentTheme = BcUtil::getCurrentTheme();
-            $message = __d('baser',
+            $message = __d('baser_core',
                 'コアファイル {0} を テーマ {1} の次のパスとしてコピーしました。\n{2}。',
                 basename($data['path']),
                 $currentTheme,
                 $targetPath
             );
-        } catch (BcFormFailedException $e) {
-            $this->setResponse($this->response->withStatus(400));
-            $errors = $e->getForm()->getErrors();
-            $message = __d('baser', '入力エラーです。内容を修正してください。' . $e->getMessage());
         } catch (\Throwable $e) {
-            $this->setResponse($this->response->withStatus(400));
-            $message = __d('baser', '処理中にエラーが発生しました。');
+            $this->setResponse($this->response->withStatus(500));
+            $message = __d('baser_core', '処理中にエラーが発生しました。' . $e->getMessage());
         }
 
         $this->set([
             'message' => $message,
-            'entity' => $entity ?? null,
-            'errors' => $errors ?? null
+            'entity' => $entity ?? null
         ]);
-        $this->viewBuilder()->setOption('serialize', ['message', 'entity', 'errors']);
+        $this->viewBuilder()->setOption('serialize', ['message', 'entity']);
     }
 
     /**
@@ -229,8 +214,8 @@ class ThemeFilesController extends BcApiController
             $data['fullpath'] = $service->getFullpath($data['theme'], $data['plugin'], $data['type'], $data['path']);
             $entity = $service->get($data['fullpath']);
         } catch (\Throwable $e) {
-            $this->setResponse($this->response->withStatus(400));
-            $message = __d('baser', '処理中にエラーが発生しました。');
+            $this->setResponse($this->response->withStatus(500));
+            $message = __d('baser_core', '処理中にエラーが発生しました。');
         }
 
         $this->set([
@@ -257,21 +242,16 @@ class ThemeFilesController extends BcApiController
             $data = $this->getRequest()->getQueryParams();
             $data['fullpath'] = $service->getFullpath($data['theme'], $data['plugin'], $data['type'], $data['path']);
             $imgDetail = $service->getImg($data);
-        } catch (BcFormFailedException $e) {
-            $this->setResponse($this->response->withStatus(400));
-            $errors = $e->getForm()->getErrors();
-            $message = __d('baser', '入力エラーです。内容を修正してください。' . $e->getMessage());
         } catch (\Throwable $e) {
-            $this->setResponse($this->response->withStatus(400));
-            $message = __d('baser', '処理中にエラーが発生しました。');
+            $this->setResponse($this->response->withStatus(500));
+            $message = __d('baser_core', '処理中にエラーが発生しました。' . $e->getMessage());
         }
 
         $this->set([
             'img' => base64_encode($imgDetail['img']) ?? null,
-            'message' => $message ?? null,
-            'errors' => $errors ?? null
+            'message' => $message ?? null
         ]);
-        $this->viewBuilder()->setOption('serialize', ['img', 'message', 'errors']);
+        $this->viewBuilder()->setOption('serialize', ['img', 'message']);
     }
 
     /**
@@ -292,11 +272,11 @@ class ThemeFilesController extends BcApiController
             $imgDetail = $service->getImgThumb($data, $data['width'], $data['height']);
         } catch (BcFormFailedException $e) {
             $this->setResponse($this->response->withStatus(400));
-            $errors = $e->getForm()->getErrors();
-            $message = __d('baser', '入力エラーです。内容を修正してください。' . $e->getMessage());
+            $message = __d('baser_core', '入力エラーです。内容を修正してください。');
+            $errors = $e->getEntity()->getErrors();
         } catch (\Throwable $e) {
-            $this->setResponse($this->response->withStatus(400));
-            $message = __d('baser', '処理中にエラーが発生しました。');
+            $this->setResponse($this->response->withStatus(500));
+            $message = __d('baser_core', '処理中にエラーが発生しました。' . $e->getMessage());
         }
 
         $this->set([
@@ -324,20 +304,15 @@ class ThemeFilesController extends BcApiController
             $data = $this->getRequest()->getData();
             $data['fullpath'] = $service->getFullpath($data['theme'], $data['plugin'], $data['type'], $data['path']);
             $service->upload($data['fullpath'], $data);
-            $message = __d('baser', 'アップロードに成功しました。');
-        } catch (BcFormFailedException $e) {
-            $this->setResponse($this->response->withStatus(400));
-            $errors = $e->getForm()->getErrors();
-            $message = __d('baser', '入力エラーです。内容を修正してください。' . $e->getMessage());
+            $message = __d('baser_core', 'アップロードに成功しました。');
         } catch (\Throwable $e) {
-            $this->setResponse($this->response->withStatus(400));
-            $message = __d('baser', '処理中にエラーが発生しました。');
+            $this->setResponse($this->response->withStatus(500));
+            $message = __d('baser_core', '処理中にエラーが発生しました。' . $e->getMessage());
         }
 
         $this->set([
-            'message' => $message,
-            'errors' => $errors ?? null
+            'message' => $message
         ]);
-        $this->viewBuilder()->setOption('serialize', ['message', 'errors']);
+        $this->viewBuilder()->setOption('serialize', ['message']);
     }
 }
