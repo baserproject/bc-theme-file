@@ -9,7 +9,7 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-namespace BcThemeFile\Test\TestCase\Controller\Api;
+namespace BcThemeFile\Test\TestCase\Controller\Api\Admin;
 
 use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Factory\UserFactory;
@@ -81,7 +81,7 @@ class ThemeFoldersControllerTest extends BcTestCase
         ];
         $query = http_build_query($data);
         //APIをコール
-        $this->get('/baser/api/bc-theme-file/theme_folders/index.json?' . $query);
+        $this->get('/baser/api/admin/bc-theme-file/theme_folders/index.json?' . $query);
         //レスポンスコードを確認
         $this->assertResponseSuccess();
         //戻る値を確認
@@ -103,7 +103,7 @@ class ThemeFoldersControllerTest extends BcTestCase
             'name' => 'new_folder',
         ];
         //APIをコール
-        $this->post('/baser/api/bc-theme-file/theme_folders/add.json?token=' . $this->accessToken, $data);
+        $this->post('/baser/api/admin/bc-theme-file/theme_folders/add.json?token=' . $this->accessToken, $data);
         //レスポンスコードを確認
         $this->assertResponseSuccess();
         //戻る値を確認
@@ -135,7 +135,7 @@ class ThemeFoldersControllerTest extends BcTestCase
             'name' => 'edit_folder',
         ];
         //APIをコール
-        $this->post('/baser/api/bc-theme-file/theme_folders/edit.json?token=' . $this->accessToken, $data);
+        $this->post('/baser/api/admin/bc-theme-file/theme_folders/edit.json?token=' . $this->accessToken, $data);
         //レスポンスコードを確認
         $this->assertResponseSuccess();
         //戻る値を確認
@@ -168,7 +168,7 @@ class ThemeFoldersControllerTest extends BcTestCase
             'path' => 'delete_folder',
         ];
         //APIをコール
-        $this->post('/baser/api/bc-theme-file/theme_folders/delete.json?token=' . $this->accessToken, $data);
+        $this->post('/baser/api/admin/bc-theme-file/theme_folders/delete.json?token=' . $this->accessToken, $data);
         //レスポンスコードを確認
         $this->assertResponseSuccess();
         //戻る値を確認
@@ -179,7 +179,7 @@ class ThemeFoldersControllerTest extends BcTestCase
         $this->assertFalse(file_exists($fullpath . 'delete_folder'));
 
         //もう一度APIをコールする場合、エラーを出る
-        $this->post('/baser/api/bc-theme-file/theme_folders/delete.json?token=' . $this->accessToken, $data);
+        $this->post('/baser/api/admin/bc-theme-file/theme_folders/delete.json?token=' . $this->accessToken, $data);
         //レスポンスコードを確認
         $this->assertResponseSuccess();
         //戻る値を確認
@@ -203,7 +203,7 @@ class ThemeFoldersControllerTest extends BcTestCase
             'path' => 'new_folder',
         ];
         //APIをコール
-        $this->post('/baser/api/bc-theme-file/theme_folders/copy.json?token=' . $this->accessToken, $data);
+        $this->post('/baser/api/admin/bc-theme-file/theme_folders/copy.json?token=' . $this->accessToken, $data);
         //レスポンスコードを確認
         $this->assertResponseSuccess();
         //戻る値を確認
@@ -232,7 +232,7 @@ class ThemeFoldersControllerTest extends BcTestCase
             'plugin' => 'BaserCore'
         ];
         //APIをコール
-        $this->post('/baser/api/bc-theme-file/theme_folders/copy_to_theme.json?token=' . $this->accessToken, $data);
+        $this->post('/baser/api/admin/bc-theme-file/theme_folders/copy_to_theme.json?token=' . $this->accessToken, $data);
         //レスポンスコードを確認
         $this->assertResponseSuccess();
         //戻る値を確認
@@ -263,7 +263,7 @@ class ThemeFoldersControllerTest extends BcTestCase
         ];
         $query = http_build_query($data);
         //APIをコール
-        $this->get('/baser/api/bc-theme-file/theme_folders/view.json?' . $query);
+        $this->get('/baser/api/admin/bc-theme-file/theme_folders/view.json?' . $query);
         //レスポンスコードを確認
         $this->assertResponseSuccess();
         //戻る値を確認

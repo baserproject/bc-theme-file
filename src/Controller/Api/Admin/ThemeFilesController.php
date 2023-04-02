@@ -9,22 +9,22 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-namespace BcThemeFile\Controller\Api;
+namespace BcThemeFile\Controller\Api\Admin;
 
-use BaserCore\Annotation\NoTodo;
-use BaserCore\Annotation\Checked;
-use BaserCore\Annotation\UnitTest;
-use BaserCore\Controller\Api\BcApiController;
+use BaserCore\Controller\Api\Admin\BcAdminApiController;
 use BaserCore\Error\BcFormFailedException;
 use BaserCore\Utility\BcUtil;
 use BaserCore\View\Helper\BcBaserHelper;
 use BcThemeFile\Service\ThemeFilesServiceInterface;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * テーマファイルコントローラー
  * @property BcBaserHelper $BcBaser
  */
-class ThemeFilesController extends BcApiController
+class ThemeFilesController extends BcAdminApiController
 {
 
     /**

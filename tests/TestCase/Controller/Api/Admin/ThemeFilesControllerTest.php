@@ -9,7 +9,7 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-namespace BcThemeFile\Test\TestCase\Controller\Api;
+namespace BcThemeFile\Test\TestCase\Controller\Api\Admin;
 
 use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Factory\UserFactory;
@@ -82,7 +82,7 @@ class ThemeFilesControllerTest extends BcTestCase
             'plugin' => 'BaserCore'
         ];
         //APIをコール
-        $this->post('/baser/api/bc-theme-file/theme_files/add.json?token=' . $this->accessToken, $data);
+        $this->post('/baser/api/admin/bc-theme-file/theme_files/add.json?token=' . $this->accessToken, $data);
         //レスポンスコードを確認
         $this->assertResponseSuccess();
         //戻る値を確認
@@ -114,7 +114,7 @@ class ThemeFilesControllerTest extends BcTestCase
             'plugin' => 'BaserCore'
         ];
         //APIをコール
-        $this->post('/baser/api/bc-theme-file/theme_files/edit.json?token=' . $this->accessToken, $data);
+        $this->post('/baser/api/admin/bc-theme-file/theme_files/edit.json?token=' . $this->accessToken, $data);
         //レスポンスコードを確認
         $this->assertResponseSuccess();
         //戻る値を確認
@@ -139,7 +139,7 @@ class ThemeFilesControllerTest extends BcTestCase
             'plugin' => 'BaserCore'
         ];
         //APIをコール
-        $this->post('/baser/api/bc-theme-file/theme_files/edit.json?token=' . $this->accessToken, $data);
+        $this->post('/baser/api/admin/bc-theme-file/theme_files/edit.json?token=' . $this->accessToken, $data);
         //レスポンスコードを確認
         $this->assertResponseSuccess();
         $result = json_decode((string)$this->_response->getBody());
@@ -173,7 +173,7 @@ class ThemeFilesControllerTest extends BcTestCase
             'path' => 'base_name_1.php'
         ];
         //APIをコール
-        $this->post('/baser/api/bc-theme-file/theme_files/delete.json?token=' . $this->accessToken, $data);
+        $this->post('/baser/api/admin/bc-theme-file/theme_files/delete.json?token=' . $this->accessToken, $data);
         //レスポンスコードを確認
         $this->assertResponseSuccess();
         //戻る値を確認
@@ -183,7 +183,7 @@ class ThemeFilesControllerTest extends BcTestCase
         $this->assertFalse(file_exists($fullpath . 'base_name_1.php'));
 
         //もう一度APIをコールする場合、エラーを出る
-        $this->post('/baser/api/bc-theme-file/theme_files/delete.json?token=' . $this->accessToken, $data);
+        $this->post('/baser/api/admin/bc-theme-file/theme_files/delete.json?token=' . $this->accessToken, $data);
         //レスポンスコードを確認
         $this->assertResponseSuccess();
         //戻る値を確認
@@ -207,7 +207,7 @@ class ThemeFilesControllerTest extends BcTestCase
             'path' => 'base_name_1.php',
         ];
         //APIをコール
-        $this->post('/baser/api/bc-theme-file/theme_files/copy.json?token=' . $this->accessToken, $data);
+        $this->post('/baser/api/admin/bc-theme-file/theme_files/copy.json?token=' . $this->accessToken, $data);
         //レスポンスコードを確認
         $this->assertResponseSuccess();
         //戻る値を確認
@@ -235,7 +235,7 @@ class ThemeFilesControllerTest extends BcTestCase
             'plugin' => 'BaserCore'
         ];
         //APIをコール
-        $this->post('/baser/api/bc-theme-file/theme_files/copy_to_theme.json?token=' . $this->accessToken, $data);
+        $this->post('/baser/api/admin/bc-theme-file/theme_files/copy_to_theme.json?token=' . $this->accessToken, $data);
         //レスポンスコードを確認
         $this->assertResponseSuccess();
         //戻る値を確認
@@ -266,7 +266,7 @@ class ThemeFilesControllerTest extends BcTestCase
         ];
         $query = http_build_query($data);
         //APIをコール
-        $this->get('/baser/api/bc-theme-file/theme_files/view.json?' . $query);
+        $this->get('/baser/api/admin/bc-theme-file/theme_files/view.json?' . $query);
         //レスポンスコードを確認
         $this->assertResponseSuccess();
         //戻る値を確認
@@ -289,7 +289,7 @@ class ThemeFilesControllerTest extends BcTestCase
         ];
         $query = http_build_query($data);
         //APIをコール
-        $this->get('/baser/api/bc-theme-file/theme_files/img.json?' . $query);
+        $this->get('/baser/api/admin/bc-theme-file/theme_files/img.json?' . $query);
         //レスポンスコードを確認
         $this->assertResponseSuccess();
         //戻る値を確認
@@ -314,7 +314,7 @@ class ThemeFilesControllerTest extends BcTestCase
         ];
         $query = http_build_query($data);
         //APIをコール
-        $this->get('/baser/api/bc-theme-file/theme_files/img_thumb.json?' . $query);
+        $this->get('/baser/api/admin/bc-theme-file/theme_files/img_thumb.json?' . $query);
         //レスポンスコードを確認
         $this->assertResponseSuccess();
         //戻る値を確認
@@ -347,7 +347,7 @@ class ThemeFilesControllerTest extends BcTestCase
         $this->setUploadFileToRequest('file', $testFile);
         $this->setUnlockedFields(['file']);
         //APIをコール
-        $this->post('/baser/api/bc-theme-file/theme_files/upload.json?token=' . $this->accessToken, $data);
+        $this->post('/baser/api/admin/bc-theme-file/theme_files/upload.json?token=' . $this->accessToken, $data);
         //レスポンスコードを確認
         $this->assertResponseSuccess();
         //戻る値を確認

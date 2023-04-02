@@ -9,22 +9,21 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-namespace BcThemeFile\Controller\Api;
+namespace BcThemeFile\Controller\Api\Admin;
 
-use BaserCore\Annotation\NoTodo;
-use BaserCore\Annotation\Checked;
-use BaserCore\Annotation\UnitTest;
-use BaserCore\Controller\Api\BcApiController;
+use BaserCore\Controller\Api\Admin\BcAdminApiController;
 use BaserCore\Error\BcFormFailedException;
 use BaserCore\Utility\BcUtil;
 use BcThemeFile\Service\ThemeFoldersService;
 use BcThemeFile\Service\ThemeFoldersServiceInterface;
-use Cake\ORM\Exception\PersistenceFailedException;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * テーマフォルダコントローラー
  */
-class ThemeFoldersController extends BcApiController
+class ThemeFoldersController extends BcAdminApiController
 {
 
     /**
