@@ -50,6 +50,10 @@ class ThemeFilesController extends BcAdminAppController
      * @param string|null $name
      * @param EventManagerInterface|null $eventManager
      * @param ComponentRegistry|null $components
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function __construct(
         ?ServerRequest $request = null,
@@ -93,6 +97,9 @@ class ThemeFilesController extends BcAdminAppController
      * 現在の画面のテーマがデフォルトテーマかどうか
      *
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     protected function isDefaultTheme()
     {
@@ -105,6 +112,7 @@ class ThemeFilesController extends BcAdminAppController
      * @param EventInterface $event
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function beforeRender(EventInterface $event): void
     {
@@ -124,6 +132,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function index(ThemeFilesAdminServiceInterface $service)
     {
@@ -138,6 +147,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function add(ThemeFilesAdminServiceInterface $service)
     {
@@ -176,6 +186,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function edit(ThemeFilesAdminServiceInterface $service)
     {
@@ -214,6 +225,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function delete(ThemeFilesAdminServiceInterface $service)
     {
@@ -241,6 +253,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function delete_folder(ThemeFoldersAdminServiceInterface $service)
     {
@@ -268,6 +281,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return    void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function view(ThemeFilesAdminServiceInterface $service)
     {
@@ -285,6 +299,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function copy(ThemeFilesAdminServiceInterface $service)
     {
@@ -311,6 +326,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function copy_folder(ThemeFoldersAdminServiceInterface $service)
     {
@@ -338,6 +354,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function upload(ThemeFilesAdminServiceInterface $service)
     {
@@ -361,6 +378,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return Response|void|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function add_folder(ThemeFoldersAdminServiceInterface $service)
     {
@@ -398,6 +416,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function edit_folder(ThemeFoldersAdminServiceInterface $service)
     {
