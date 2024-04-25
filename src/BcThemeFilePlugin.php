@@ -21,7 +21,7 @@ use Cake\Core\ContainerInterface;
 /**
  * Class Plugin
  */
-class Plugin extends BcPlugin
+class BcThemeFilePlugin extends BcPlugin
 {
 
     /**
