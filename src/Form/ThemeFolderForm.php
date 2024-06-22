@@ -11,7 +11,7 @@
 
 namespace BcThemeFile\Form;
 
-use Cake\Filesystem\Folder;
+use BaserCore\Utility\BcFolder;
 use Cake\Form\Form;
 use Cake\Form\Schema;
 use BaserCore\Annotation\UnitTest;
@@ -50,13 +50,14 @@ class ThemeFolderForm extends Form
      */
     protected function _execute(array $data): bool
     {
-        $folder = new Folder();
+        $folder = new BcFolder($data['fullpath'] . DS . $data['name'] . DS);
         if($data['mode'] === 'create') {
-            return $folder->create($data['fullpath'] . DS . $data['name'] . DS, 0777);
+            return $folder->create();
         } elseif($data['mode'] === 'update') {
             $newPath = dirname($data['fullpath']) . DS . $data['name'] . DS;
             if($newPath === $data['fullpath']) return true;
-            return $folder->move($newPath, ['from' => $data['fullpath'], 'chmod' => 0777, 'skip' => ['_notes']]);
+            $folder = new BcFolder($data['fullpath']);
+            return $folder->move($newPath);
         }
         return false;
     }
@@ -72,19 +73,19 @@ class ThemeFolderForm extends Form
     {
         $validator
             ->scalar('name')
-            ->requirePresence('name', 'create', __d('baser_core', 'テーマフォルダー名を入力してください。'))
-            ->notEmptyString('name', __d('baser_core', 'テーマフォルダー名を入力してください。'))
+            ->requirePresence('name', 'create', __d('baser_core', 'フォルダ名を入力してください。'))
+            ->notEmptyString('name', __d('baser_core', 'フォルダ名を入力してください。'))
             ->add('name', [
                 'duplicateThemeFolder' => [
                     'provider' => 'form',
                     'rule' => ['duplicateThemeFolder'],
-                    'message' => __d('baser_core', '入力されたテーマフォルダー名は、同一階層に既に存在します。')
+                    'message' => __d('baser_core', '入力されたフォルダ名は、同一階層に既に存在します。')
                 ]])
             ->add('name', [
                 'nameAlphaNumericPlus' => [
                     'rule' => ['alphaNumericPlus'],
                     'provider' => 'bc',
-                    'message' => __d('baser_core', 'テーマフォルダー名は半角英数字とハイフン、アンダースコアのみが利用可能です。')
+                    'message' => __d('baser_core', 'フォルダ名は半角英数字とハイフン、アンダースコアのみが利用可能です。')
                 ]]);
         return $validator;
     }
