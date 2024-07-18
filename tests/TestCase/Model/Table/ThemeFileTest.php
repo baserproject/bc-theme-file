@@ -1,6 +1,4 @@
 <?php
-// TODO ucmitz  : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -10,28 +8,26 @@ return;
  * @since           baserCMS v 3.0.0-beta
  * @license         https://basercms.net/license/index.html
  */
-App::uses('ThemeFile', 'Model');
-App::uses('File', 'Utility');
+namespace BcThemeFile\Test\TestCase\Model\Table;
+
+use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcFile;
 
 /**
  * Class ThemeFileTest
  */
-class ThemeFileTest extends BaserTestCase
+class ThemeFileTest extends BcTestCase
 {
 
-    public $fixtures = [
-        'baser.Default.ThemeConfig',
-    ];
-
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
-        $this->ThemeFile = ClassRegistry::init('ThemeFile');
+//        $this->ThemeFile = ClassRegistry::init('ThemeFile');
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
-        unset($this->ThemeFile);
+//        unset($this->ThemeFile);
         parent::tearDown();
     }
 
@@ -40,6 +36,7 @@ class ThemeFileTest extends BaserTestCase
      */
     public function test必須チェック異常系()
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->ThemeFile->create([
             'ThemeFile' => [
                 'name' => '',
@@ -55,6 +52,7 @@ class ThemeFileTest extends BaserTestCase
 
     public function test必須チェック正常系()
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->ThemeFile->create([
             'ThemeFile' => [
                 'name' => 'baser',
@@ -71,7 +69,7 @@ class ThemeFileTest extends BaserTestCase
      */
     public function testDuplicateThemeFile()
     {
-        $themeFile = new File(TMP . 'test/theme-file.php', true);
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->ThemeFile->create([
             'ThemeFile' => [
                 'name' => 'another-theme-file',
@@ -92,8 +90,7 @@ class ThemeFileTest extends BaserTestCase
         ]);
         $this->assertFalse($this->ThemeFile->validates(), 'テーマファイルが重複しているにも関わらずバリデーションに成功しています。');
 
-        $themeFile->delete();
-        $themeFile->close();
+        (new BcFile(TMP . 'test/theme-file.php'))->delete();
     }
 
 }
