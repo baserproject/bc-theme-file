@@ -14,12 +14,9 @@ namespace BcThemeFile\Test\TestCase\Service;
 use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Error\BcFormFailedException;
 use BaserCore\TestSuite\BcTestCase;
-use BaserCore\Utility\BcFile;
-use BaserCore\Utility\BcFolder;
 use BcThemeFile\Service\ThemeFilesService;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
-use Laminas\Diactoros\UploadedFile;
 
 /**
  * ThemeFilesServiceTest
@@ -150,7 +147,7 @@ class ThemeFilesServiceTest extends BcTestCase
     {
         //POSTデータを生成
         $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
-        (new BcFile($fullpath . 'test.php'))->create();
+        new File($fullpath . 'test.php', true);
         $data = [
             'fullpath' => $fullpath . 'test.php',
             'parent' => $fullpath,
@@ -185,7 +182,7 @@ class ThemeFilesServiceTest extends BcTestCase
     {
         //テストファイルを作成
         $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/base_name_1.php';
-        (new BcFile($fullpath))->create();
+        new File($fullpath, true);
         $rs = $this->ThemeFileService->delete($fullpath);
         //戻る値を確認
         $this->assertTrue($rs);
@@ -205,7 +202,7 @@ class ThemeFilesServiceTest extends BcTestCase
     {
         //テストファイルを作成
         $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
-        (new BcFile($fullpath . 'base_name_1.php', true))->create();
+        new File($fullpath . 'base_name_1.php', true);
         //サービスメソッドをコール
         $rs = $this->ThemeFileService->copy($fullpath . 'base_name_1.php');
         //戻る値を確認
@@ -225,23 +222,23 @@ class ThemeFilesServiceTest extends BcTestCase
     {
         //テストテーマフォルダを作成
         $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
-        (new BcFolder($fullpath . 'new_folder'))->create();
+        (new Folder())->create($fullpath . 'new_folder', 0777);
 
         //テストファイルを作成
         $filePath = TMP . 'test_upload' . DS;
-        (new BcFolder($filePath))->create();
+        (new Folder())->create($filePath, 0777);
         $testFile = $filePath . 'uploadTestFile.html';
-        (new BcFile($testFile))->create();
+        new File($testFile, true);
 
         //Postデータを生成
         $files = [
-            'file' => new UploadedFile(
-                $testFile,
-                10,
-                UPLOAD_ERR_OK,
-                'uploadTestFile.html',
-                "html",
-            )
+            'file' => [
+                'error' => 0,
+                'name' => 'uploadTestFile.html',
+                'size' => 1,
+                'tmp_name' => $testFile,
+                'type' => 'html'
+            ]
         ];
         //テスト対象メソッドをコール
         $this->ThemeFileService->upload($fullpath . 'new_folder', $files);

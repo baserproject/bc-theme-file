@@ -32,7 +32,7 @@ class ThemeFolder extends \Cake\ORM\Entity
      *
      * @var array
      */
-    protected array $_accessible = [
+    protected $_accessible = [
         '*' => true,
         'id' => false
     ];
@@ -42,7 +42,7 @@ class ThemeFolder extends \Cake\ORM\Entity
      *
      * @var string[]
      */
-    protected array $_virtual = [
+    protected $_virtual = [
         'name',
         'path',
         'parent'

@@ -17,11 +17,11 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Error\BcException;
 use BaserCore\Error\BcFormFailedException;
 use BaserCore\Utility\BcContainerTrait;
-use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcUtil;
 use BcThemeFile\Form\ThemeFolderForm;
 use BcThemeFile\Model\Entity\ThemeFolder;
 use Cake\Core\Plugin;
+use Cake\Filesystem\Folder;
 
 /**
  * ThemeFoldersService
@@ -104,15 +104,16 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
                 ];
             }
         }
-        $folder = new BcFolder($params['fullpath']);
+        $folder = new Folder($params['fullpath']);
+        $files = $folder->read(true, true);
         $themeFiles = [];
         $folders = [];
-        foreach($folder->getFolders() as $file) {
+        foreach($files[0] as $file) {
             if (in_array($file, $excludeFolderList)) continue;
             $folders[] = $this->get($params['fullpath'] . $file);
         }
         $themeFilesService = $this->getService(ThemeFilesServiceInterface::class);
-        foreach($folder->getFiles() as $file) {
+        foreach($files[1] as $file) {
             if (in_array($file, $excludeFileList)) continue;
             $themeFiles[] = $themeFilesService->get($params['fullpath'] . $file);
         }
@@ -182,8 +183,8 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
     public function delete(string $fullpath)
     {
         if (is_dir($fullpath)) {
-            $folder = new BcFolder($fullpath);
-            return $folder->delete();
+            $folder = new Folder();
+            return $folder->delete($fullpath);
         } else {
             return false;
         }
@@ -209,8 +210,12 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
             }
             $newPath .= '_copy';
         }
-        $folder = new BcFolder($fullpath);
-        $result = $folder->copy($newPath);
+        $folder = new Folder();
+        $result = $folder->copy($newPath, [
+            'from' => $fullpath,
+            'chmod' => 0777,
+            'skip' => ['_notes'
+        ]]);
         $folder = null;
         if ($result) {
             return $newEntity;
@@ -297,9 +302,9 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
         } else {
             $themePath = Plugin::templatePath($theme) . $params['path'] . DS;
         }
-        (new BcFolder(dirname($themePath)))->create();
-        $folder = new BcFolder($params['fullpath']);
-        if ($folder->copy($themePath)) {
+        $folder = new Folder();
+        $folder->create(dirname($themePath), 0777);
+        if ($folder->copy($themePath, ['from' => $params['fullpath'], 'chmod' => 0777, 'skip' => ['_notes']])) {
             return str_replace(ROOT, '', $themePath);
         } else {
             return false;
