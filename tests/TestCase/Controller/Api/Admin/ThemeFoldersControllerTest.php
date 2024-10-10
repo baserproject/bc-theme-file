@@ -114,7 +114,6 @@ class ThemeFoldersControllerTest extends BcTestCase
         $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
         $data = [
             'theme' => 'BcThemeSample',
-            'parent' => '/var/www/html/plugins/BcThemeSample/templates/layout/',
             'plugin' => 'BaserCore',
             'type' => 'layout',
             'path' => '',
@@ -147,7 +146,6 @@ class ThemeFoldersControllerTest extends BcTestCase
         //Postデータを生成
         $data = [
             'theme' => 'BcThemeSample',
-            'parent' => '/var/www/html/plugins/BcThemeSample/templates/layout/',
             'plugin' => 'BaserCore',
             'type' => 'layout',
             'path' => 'new_folder',
@@ -182,7 +180,6 @@ class ThemeFoldersControllerTest extends BcTestCase
         //Postデータを生成
         $data = [
             'theme' => 'BcThemeSample',
-            'parent' => '/var/www/html/plugins/BcThemeSample/templates/layout/',
             'plugin' => 'BaserCore',
             'type' => 'layout',
             'path' => 'delete_folder',
@@ -218,7 +215,6 @@ class ThemeFoldersControllerTest extends BcTestCase
         //Postデータを生成
         $data = [
             'theme' => 'BcThemeSample',
-            'parent' => '/var/www/html/plugins/BcThemeSample/templates/layout/',
             'plugin' => 'BaserCore',
             'type' => 'layout',
             'path' => 'new_folder',
@@ -247,7 +243,6 @@ class ThemeFoldersControllerTest extends BcTestCase
         $fullpath = BASER_PLUGINS . '/BcPluginSample/templates/';
         $data = [
             'theme' => 'BcFront',
-            'parent' => '/var/www/html/plugins/BcThemeSample/templates/layout/',
             'type' => 'Pages',
             'path' => '',
             'assets' => '',
