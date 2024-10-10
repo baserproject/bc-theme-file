@@ -11,7 +11,7 @@
 
 namespace BcThemeFile\Form;
 
-use BaserCore\Utility\BcFolder;
+use Cake\Filesystem\Folder;
 use Cake\Form\Form;
 use Cake\Form\Schema;
 use BaserCore\Annotation\UnitTest;
@@ -32,7 +32,6 @@ class ThemeFolderForm extends Form
      * @return Schema
      * @checked
      * @noTodo
-     * @unitTest
      */
     protected function _buildSchema(Schema $schema): Schema
     {
@@ -48,18 +47,16 @@ class ThemeFolderForm extends Form
      * @return bool
      * @checked
      * @noTodo
-     * @unitTest
      */
     protected function _execute(array $data): bool
     {
-        $folder = new BcFolder($data['fullpath'] . DS . $data['name'] . DS);
+        $folder = new Folder();
         if($data['mode'] === 'create') {
-            return $folder->create();
+            return $folder->create($data['fullpath'] . DS . $data['name'] . DS, 0777);
         } elseif($data['mode'] === 'update') {
             $newPath = dirname($data['fullpath']) . DS . $data['name'] . DS;
             if($newPath === $data['fullpath']) return true;
-            $folder = new BcFolder($data['fullpath']);
-            return $folder->move($newPath);
+            return $folder->move($newPath, ['from' => $data['fullpath'], 'chmod' => 0777, 'skip' => ['_notes']]);
         }
         return false;
     }
@@ -70,25 +67,24 @@ class ThemeFolderForm extends Form
      * @return Validator
      * @checked
      * @noTodo
-     * @unitTest
      */
     public function validationDefault(Validator $validator): Validator
     {
         $validator
             ->scalar('name')
-            ->requirePresence('name', 'create', __d('baser_core', 'フォルダ名を入力してください。'))
-            ->notEmptyString('name', __d('baser_core', 'フォルダ名を入力してください。'))
+            ->requirePresence('name', 'create', __d('baser_core', 'テーマフォルダー名を入力してください。'))
+            ->notEmptyString('name', __d('baser_core', 'テーマフォルダー名を入力してください。'))
             ->add('name', [
                 'duplicateThemeFolder' => [
                     'provider' => 'form',
                     'rule' => ['duplicateThemeFolder'],
-                    'message' => __d('baser_core', '入力されたフォルダ名は、同一階層に既に存在します。')
+                    'message' => __d('baser_core', '入力されたテーマフォルダー名は、同一階層に既に存在します。')
                 ]])
             ->add('name', [
                 'nameAlphaNumericPlus' => [
                     'rule' => ['alphaNumericPlus'],
                     'provider' => 'bc',
-                    'message' => __d('baser_core', 'フォルダ名は半角英数字とハイフン、アンダースコアのみが利用可能です。')
+                    'message' => __d('baser_core', 'テーマフォルダー名は半角英数字とハイフン、アンダースコアのみが利用可能です。')
                 ]]);
         return $validator;
     }
@@ -100,7 +96,6 @@ class ThemeFolderForm extends Form
      * @return boolean
      * @checked
      * @noTodo
-     * @unitTest
      */
     public function duplicateThemeFolder($value, $context = null)
     {

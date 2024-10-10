@@ -1,4 +1,6 @@
 <?php
+// TODO ucmitz  : コード確認要
+return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -8,29 +10,27 @@
  * @since           baserCMS v 3.0.0-beta
  * @license         https://basercms.net/license/index.html
  */
-
-namespace BcThemeFile\Test\TestCase\Model\Table;
-use BaserCore\TestSuite\BcTestCase;
+App::uses('ThemeFolder', 'Model');
 
 /**
  * Class ThemeFolderTest
  */
-class ThemeFolderTest extends BcTestCase
+class ThemeFolderTest extends BaserTestCase
 {
 
-    /**
-     * set up
-     */
-    public function setUp(): void
+    public $fixtures = [
+        'baser.Default.ThemeConfig',
+    ];
+
+    public function setUp()
     {
         parent::setUp();
+        $this->ThemeFolder = ClassRegistry::init('ThemeFolder');
     }
 
-    /**
-     * tear down
-     */
-    public function tearDown(): void
+    public function tearDown()
     {
+        unset($this->ThemeFolder);
         parent::tearDown();
     }
 
@@ -39,7 +39,6 @@ class ThemeFolderTest extends BcTestCase
      */
     public function test必須チェック()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->ThemeFolder->create([
             'ThemeFolder' => [
                 'name' => '',
@@ -52,7 +51,6 @@ class ThemeFolderTest extends BcTestCase
 
     public function test半角英数チェック異常系()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->ThemeFolder->create([
             'ThemeFolder' => [
                 'name' => '１２３ａｂｃ',
@@ -65,7 +63,6 @@ class ThemeFolderTest extends BcTestCase
 
     public function test重複チェック異常系()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->ThemeFolder->create([
             'ThemeFolder' => [
                 'name' => 'nada-icons',

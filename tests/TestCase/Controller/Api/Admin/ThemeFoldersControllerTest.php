@@ -14,7 +14,7 @@ namespace BcThemeFile\Test\TestCase\Controller\Api\Admin;
 use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\TestSuite\BcTestCase;
-use BaserCore\Utility\BcFolder;
+use Cake\Filesystem\Folder;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 class ThemeFoldersControllerTest extends BcTestCase
@@ -58,7 +58,7 @@ class ThemeFoldersControllerTest extends BcTestCase
     public function test_batch()
     {
         $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
-        (new BcFolder($fullpath . 'delete_folder'))->create();
+        (new Folder())->create($fullpath . 'delete_folder', 0777);
         //APIをコール
         $this->post('/baser/api/admin/bc-theme-file/theme_folders/batch.json?token=' . $this->accessToken,
             [
@@ -178,7 +178,7 @@ class ThemeFoldersControllerTest extends BcTestCase
     {
         //テストテーマフォルダを作成
         $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
-        (new BcFolder($fullpath . 'delete_folder'))->create();
+        (new Folder())->create($fullpath . 'delete_folder', 0777);
         //Postデータを生成
         $data = [
             'theme' => 'BcThemeSample',
@@ -214,7 +214,7 @@ class ThemeFoldersControllerTest extends BcTestCase
     {
         //テストテーマフォルダを作成
         $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
-        (new BcFolder($fullpath . 'new_folder'))->create();
+        (new Folder())->create($fullpath . 'new_folder', 0777);
         //Postデータを生成
         $data = [
             'theme' => 'BcThemeSample',

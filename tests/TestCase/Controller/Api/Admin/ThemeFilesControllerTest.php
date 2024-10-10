@@ -16,6 +16,8 @@ use BaserCore\Test\Factory\UserFactory;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcFile;
 use BaserCore\Utility\BcFolder;
+use Cake\Filesystem\File;
+use Cake\Filesystem\Folder;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 class ThemeFilesControllerTest extends BcTestCase
@@ -90,8 +92,8 @@ class ThemeFilesControllerTest extends BcTestCase
     {
         //POSTデータを生成
         $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
-        (new BcFile($fullpath . 'base_name_1.php'))->create();
-        (new BcFile($fullpath . 'Admin/default.php'))->create();
+        new File($fullpath . 'base_name_1.php', true);
+        new File($fullpath . 'Admin/default.php', true);
         $data = [
             'theme' => 'BcThemeSample',
             'type' => 'layout',
@@ -152,7 +154,7 @@ class ThemeFilesControllerTest extends BcTestCase
     {
         //テストファイルを作成
         $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
-        (new BcFile($fullpath . 'base_name_1.php'))->create();
+        new File($fullpath . 'base_name_1.php', true);
         //POSTデータを生成
         $data = [
             'theme' => 'BcThemeSample',
@@ -186,7 +188,7 @@ class ThemeFilesControllerTest extends BcTestCase
     {
         //テストファイルを作成
         $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
-        (new BcFile($fullpath . 'base_name_1.php'))->create();
+        new File($fullpath . 'base_name_1.php', true);
         //POSTデータを生成
         $data = [
             'theme' => 'BcThemeSample',
@@ -215,7 +217,7 @@ class ThemeFilesControllerTest extends BcTestCase
     {
         //POSTデータを生成
         $fullpath = BASER_PLUGINS . 'bc-front' . '/templates/layout/';
-        (new BcFile($fullpath . 'base_name_1.php'))->create();
+        new File($fullpath . 'base_name_1.php', true);
         $data = [
             'theme' => 'BcFront',
             'type' => 'layout',
@@ -317,13 +319,17 @@ class ThemeFilesControllerTest extends BcTestCase
     {
         //テストテーマフォルダを作成
         $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
-        (new BcFolder($fullpath . 'new_folder'))->create();
+        $folder = new BcFolder($fullpath . 'new_folder');
+        $folder->create();
 
         //テストファイルを作成
-        $filePath = TMP  . 'test_upload' . DS;
-        (new BcFolder($filePath))->create();
+        $filePath = TMP . 'test_upload' . DS;
+        $folder = new BcFolder($filePath);
+        $folder->create();
+
         $testFile = $filePath . 'uploadTestFile.html';
-        (new BcFile($testFile))->create();
+        $file = new BcFile($testFile);
+        $file->create();
 
         //Postデータを生成
         $data = [
@@ -345,7 +351,6 @@ class ThemeFilesControllerTest extends BcTestCase
         $this->assertTrue(file_exists($fullpath . 'new_folder/uploadTestFile.html'));
 
         //テストファイルとフォルダを削除
-        (new BcFolder($filePath))->delete();
-        (new BcFolder($fullpath . 'new_folder'))->delete();
+        $folder->delete();
     }
 }
