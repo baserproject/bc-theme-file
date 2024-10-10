@@ -31,9 +31,6 @@ class ThemeFilesController extends BcAdminApiController
      * [API] テーマファイル ファイル新規追加
      *
      * @param ThemeFilesServiceInterface $service
-     * @checked
-     * @noTodo
-     * @unitTest
      */
     public function add(ThemeFilesServiceInterface $service)
     {
