@@ -34,7 +34,6 @@ class ThemeFoldersAdminService extends ThemeFoldersService implements ThemeFolde
      * @return array
      * @checked
      * @noTodo
-     * @checked
      */
     public function getViewVarsForEdit(ThemeFolder $entity, ThemeFolderForm $form, array $args)
     {

@@ -40,7 +40,6 @@ class ThemeFilesService extends BcThemeFileService implements ThemeFilesServiceI
      *
      * @checked
      * @noTodo
-     * @unitTest
      */
     public function __construct()
     {
