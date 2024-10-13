@@ -13,6 +13,7 @@ namespace BcThemeFile\Controller\Admin;
 
 use BaserCore\Controller\Admin\BcAdminAppController;
 use BaserCore\Error\BcFormFailedException;
+use BaserCore\Utility\BcFolder;
 use BaserCore\Utility\BcUtil;
 use BcThemeFile\Service\Admin\ThemeFilesAdminService;
 use BcThemeFile\Service\Admin\ThemeFilesAdminServiceInterface;
@@ -50,6 +51,10 @@ class ThemeFilesController extends BcAdminAppController
      * @param string|null $name
      * @param EventManagerInterface|null $eventManager
      * @param ComponentRegistry|null $components
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function __construct(
         ?ServerRequest $request = null,
@@ -93,6 +98,9 @@ class ThemeFilesController extends BcAdminAppController
      * 現在の画面のテーマがデフォルトテーマかどうか
      *
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     protected function isDefaultTheme()
     {
@@ -105,6 +113,7 @@ class ThemeFilesController extends BcAdminAppController
      * @param EventInterface $event
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function beforeRender(EventInterface $event): void
     {
@@ -124,6 +133,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function index(ThemeFilesAdminServiceInterface $service)
     {
@@ -135,13 +145,15 @@ class ThemeFilesController extends BcAdminAppController
     /**
      * テーマファイル作成
      *
-     * @return void
+     * @return void|Response
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function add(ThemeFilesAdminServiceInterface $service)
     {
         $args = $this->parseArgs(func_get_args());
+        if (!$args['theme']) $this->notFound();
         if (!BcThemeFileUtil::getTemplateTypeName($args['type'])) $this->notFound();
 
         $entity = $service->getNew($args['fullpath'], $args['type']);
@@ -152,7 +164,7 @@ class ThemeFilesController extends BcAdminAppController
                 $form = $service->create($this->getRequest()->getData());
                 $entity = $service->get($form->getData('fullpath'));
                 $this->BcMessage->setInfo(sprintf(__d('baser_core', 'ファイル %s を作成しました。'), $entity->name));
-                $this->redirect(array_merge(
+                return $this->redirect(array_merge(
                     ['action' => 'edit', $args['theme'], $args['plugin'], $args['type']],
                     explode('/', $args['path']),
                     [$entity->name]
@@ -176,6 +188,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function edit(ThemeFilesAdminServiceInterface $service)
     {
@@ -192,7 +205,7 @@ class ThemeFilesController extends BcAdminAppController
                 $this->BcMessage->setInfo(sprintf(__d('baser_core', 'ファイル %s を更新しました。'), $themeFile->name));
                 $this->redirect(array_merge(
                     [$args['theme'], $args['plugin'], $args['type']],
-                    explode('/', dirname($args['path'])),
+                    (str_contains($args['path'], '/'))? explode('/', dirname($args['path'])) : [],
                     [$themeFile->name]
                 ));
             } catch (BcFormFailedException $e) {
@@ -214,6 +227,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function delete(ThemeFilesAdminServiceInterface $service)
     {
@@ -230,7 +244,7 @@ class ThemeFilesController extends BcAdminAppController
 
         $this->redirect(array_merge(
             ['action' => 'index', $args['theme'], $args['plugin'], $args['type']],
-            explode('/', dirname($args['path']))
+            (str_contains($args['path'], '/'))? explode('/', dirname($args['path'])) : []
         ));
     }
 
@@ -241,6 +255,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function delete_folder(ThemeFoldersAdminServiceInterface $service)
     {
@@ -257,7 +272,7 @@ class ThemeFilesController extends BcAdminAppController
 
         $this->redirect(array_merge(
             ['action' => 'index', $args['theme'], $args['plugin'], $args['type']],
-            explode('/', dirname($args['path']))
+            (str_contains($args['path'], '/'))? explode('/', dirname($args['path'])) : []
         ));
     }
 
@@ -268,6 +283,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return    void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function view(ThemeFilesAdminServiceInterface $service)
     {
@@ -285,6 +301,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function copy(ThemeFilesAdminServiceInterface $service)
     {
@@ -301,7 +318,7 @@ class ThemeFilesController extends BcAdminAppController
 
         $this->redirect(array_merge(
             ['action' => 'index', $args['theme'], $args['plugin'], $args['type']],
-            explode('/', dirname($args['path']))
+            (str_contains($args['path'], '/'))? explode('/', dirname($args['path'])) : []
         ));
     }
 
@@ -311,6 +328,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function copy_folder(ThemeFoldersAdminServiceInterface $service)
     {
@@ -327,7 +345,7 @@ class ThemeFilesController extends BcAdminAppController
 
         $this->redirect(array_merge(
             ['action' => 'index', $args['theme'], $args['plugin'], $args['type']],
-            explode('/', dirname($args['path']))
+            (str_contains($args['path'], '/'))? explode('/', dirname($args['path'])) : []
         ));
     }
 
@@ -338,6 +356,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function upload(ThemeFilesAdminServiceInterface $service)
     {
@@ -361,6 +380,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return Response|void|null
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function add_folder(ThemeFoldersAdminServiceInterface $service)
     {
@@ -398,6 +418,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function edit_folder(ThemeFoldersAdminServiceInterface $service)
     {
@@ -433,6 +454,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function view_folder(ThemeFoldersAdminServiceInterface $service)
     {
@@ -451,6 +473,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function copy_to_theme(ThemeFilesAdminServiceInterface $service)
     {
@@ -489,6 +512,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function copy_folder_to_theme(ThemeFoldersServiceInterface $service)
     {
@@ -527,6 +551,7 @@ class ThemeFilesController extends BcAdminAppController
      * @param ThemeFilesAdminService $service
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function img(ThemeFilesAdminServiceInterface $service)
     {
@@ -546,6 +571,7 @@ class ThemeFilesController extends BcAdminAppController
      * @param ThemeFilesAdminService $service
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function img_thumb(ThemeFilesAdminServiceInterface $service)
     {
@@ -574,6 +600,7 @@ class ThemeFilesController extends BcAdminAppController
      * @return array
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function parseArgs($args)
     {
@@ -600,16 +627,15 @@ class ThemeFilesController extends BcAdminAppController
             $args = array_merge($args);
         }
         if (!empty($args[1]) && !BcThemeFileUtil::getTemplateTypeName($args[1])) {
-            $folder = new Folder(BASER_PLUGINS);
-            $files = $folder->read(true, true);
-            foreach($files[0] as $file) {
+            $folder = new BcFolder(BASER_PLUGINS);
+            $files = $folder->getFolders();
+            foreach($files as $file) {
                 if ($args[1] !== Inflector::camelize($file, '-')) continue;
                 $data['plugin'] = $args[1];
                 unset($args[1]);
                 break;
             }
         }
-
         if ($data['plugin']) {
             if (!empty($args[0])) {
                 $data['theme'] = $args[0];
@@ -629,6 +655,7 @@ class ThemeFilesController extends BcAdminAppController
                 unset($args[1]);
             }
         }
+        if(!$data['theme']) return $data;
 
         if (empty($data['type'])) $data['type'] = 'layout';
         if (!empty($args)) $data['path'] = rawurldecode(implode(DS, $args));

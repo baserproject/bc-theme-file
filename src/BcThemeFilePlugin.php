@@ -21,7 +21,7 @@ use Cake\Core\ContainerInterface;
 /**
  * Class Plugin
  */
-class Plugin extends BcPlugin
+class BcThemeFilePlugin extends BcPlugin
 {
 
     /**
@@ -29,6 +29,7 @@ class Plugin extends BcPlugin
      * @param ContainerInterface $container
      * @checked
      * @noTodo
+     * @UnitTest
      */
     public function services(ContainerInterface $container): void
     {

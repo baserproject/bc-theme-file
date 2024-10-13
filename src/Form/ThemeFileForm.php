@@ -11,9 +11,9 @@
 
 namespace BcThemeFile\Form;
 
+use BaserCore\Utility\BcFile;
+use BaserCore\Utility\BcFolder;
 use BcThemeFile\Model\Entity\ThemeFile;
-use Cake\Filesystem\File;
-use Cake\Filesystem\Folder;
 use Cake\Form\Form;
 use Cake\Form\Schema;
 use BaserCore\Annotation\UnitTest;
@@ -34,6 +34,7 @@ class ThemeFileForm extends Form
      * @return Schema
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _buildSchema(Schema $schema): Schema
     {
@@ -54,18 +55,19 @@ class ThemeFileForm extends Form
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _execute(array $data): bool
     {
-        if(!in_array($data['mode'], ['create', 'update'])) return false;
+        if (!in_array($data['mode'], ['create', 'update'])) return false;
 
-        if($data['mode'] === 'create') {
+        if ($data['mode'] === 'create') {
             $oldPath = $newPath = $fullpath = $data['fullpath'] . $data['base_name'] . '.' . $data['ext'];
             if (!is_dir(dirname($fullpath))) {
-                $folder = new Folder();
-                $folder->create(dirname($fullpath), 0777);
+                $folder = new BcFolder(dirname($fullpath));
+                $folder->create();
             }
-        } elseif($data['mode'] === 'update') {
+        } elseif ($data['mode'] === 'update') {
             $oldPath = rawurldecode($data['fullpath']);
             $newPath = dirname($data['fullpath']) . DS . rawurldecode($data['base_name']);
             if ($data['ext']) $newPath .= '.' . $data['ext'];
@@ -73,12 +75,11 @@ class ThemeFileForm extends Form
 
         $entity = new ThemeFile(['fullpath' => $newPath]);
         if ($entity->type === 'text') {
-            $file = new File($oldPath);
-            if ($file->open('w')) {
+            $file = new BcFile($oldPath);
+            if ($file) {
                 if (isset($data['contents'])){
-                    $file->append($data['contents']);
+                    $file->write($data['contents']);
                 }
-                $file->close();
                 unset($file);
                 $result = true;
             } else {
@@ -98,6 +99,9 @@ class ThemeFileForm extends Form
      * Validation default
      * @param Validator $validator
      * @return Validator
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function validationDefault(Validator $validator): Validator
     {
@@ -125,6 +129,9 @@ class ThemeFileForm extends Form
      *
      * @param array $check
      * @return    boolean
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function duplicateThemeFile($value, $context = null)
     {

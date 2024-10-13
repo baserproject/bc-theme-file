@@ -11,6 +11,10 @@
 
 namespace BcThemeFile\Utility;
 
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+
 /**
  * BcThemeFileUtil
  */
@@ -22,6 +26,9 @@ class BcThemeFileUtil
      *
      * @param string $type
      * @return false|mixed
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public static function getTemplateTypeName(string $type)
     {

@@ -14,7 +14,7 @@ namespace BcThemeFile\Test\TestCase\Controller\Api\Admin;
 use BaserCore\Test\Factory\SiteFactory;
 use BaserCore\Test\Factory\UserFactory;
 use BaserCore\TestSuite\BcTestCase;
-use Cake\Filesystem\Folder;
+use BaserCore\Utility\BcFolder;
 use CakephpFixtureFactories\Scenario\ScenarioAwareTrait;
 
 class ThemeFoldersControllerTest extends BcTestCase
@@ -24,19 +24,6 @@ class ThemeFoldersControllerTest extends BcTestCase
      * ScenarioAwareTrait
      */
     use ScenarioAwareTrait;
-
-    /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'plugin.BaserCore.Factory/Sites',
-        'plugin.BaserCore.Factory/SiteConfigs',
-        'plugin.BaserCore.Factory/Users',
-        'plugin.BaserCore.Factory/UsersUserGroups',
-        'plugin.BaserCore.Factory/UserGroups',
-    ];
 
     /**
      * set up
@@ -63,6 +50,36 @@ class ThemeFoldersControllerTest extends BcTestCase
     public function tearDown(): void
     {
         parent::tearDown();
+    }
+
+    /**
+     * test batch
+     */
+    public function test_batch()
+    {
+        $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
+        (new BcFolder($fullpath . 'delete_folder'))->create();
+        //APIをコール
+        $this->post('/baser/api/admin/bc-theme-file/theme_folders/batch.json?token=' . $this->accessToken,
+            [
+                'batch' => 'delete',
+                'batch_targets' => [$fullpath]
+            ]);
+        //レスポンスコードを確認
+        $this->assertResponseSuccess();
+        //戻る値を確認
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('一括処理が完了しました。', $result->message);
+        //実際にフォルダが削除されいてるか確認すること
+        $this->assertFalse(file_exists($fullpath . 'delete_folder'));
+
+        //$allowMethodは削除ではない場合、
+        $this->post('/baser/api/admin/bc-theme-file/theme_folders/batch.json?token=' . $this->accessToken,
+            [
+                'batch' => 'create',
+                'batch_targets' => [$fullpath]
+            ]);
+        $this->assertResponseCode(500);
     }
 
     /**
@@ -97,6 +114,7 @@ class ThemeFoldersControllerTest extends BcTestCase
         $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
         $data = [
             'theme' => 'BcThemeSample',
+            'parent' => '/var/www/html/plugins/BcThemeSample/templates/layout/',
             'plugin' => 'BaserCore',
             'type' => 'layout',
             'path' => '',
@@ -129,6 +147,7 @@ class ThemeFoldersControllerTest extends BcTestCase
         //Postデータを生成
         $data = [
             'theme' => 'BcThemeSample',
+            'parent' => '/var/www/html/plugins/BcThemeSample/templates/layout/',
             'plugin' => 'BaserCore',
             'type' => 'layout',
             'path' => 'new_folder',
@@ -159,10 +178,11 @@ class ThemeFoldersControllerTest extends BcTestCase
     {
         //テストテーマフォルダを作成
         $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
-        (new Folder())->create($fullpath . 'delete_folder', 0777);
+        (new BcFolder($fullpath . 'delete_folder'))->create();
         //Postデータを生成
         $data = [
             'theme' => 'BcThemeSample',
+            'parent' => '/var/www/html/plugins/BcThemeSample/templates/layout/',
             'plugin' => 'BaserCore',
             'type' => 'layout',
             'path' => 'delete_folder',
@@ -194,10 +214,11 @@ class ThemeFoldersControllerTest extends BcTestCase
     {
         //テストテーマフォルダを作成
         $fullpath = BASER_PLUGINS . 'BcThemeSample' . '/templates/layout/';
-        (new Folder())->create($fullpath . 'new_folder', 0777);
+        (new BcFolder($fullpath . 'new_folder'))->create();
         //Postデータを生成
         $data = [
             'theme' => 'BcThemeSample',
+            'parent' => '/var/www/html/plugins/BcThemeSample/templates/layout/',
             'plugin' => 'BaserCore',
             'type' => 'layout',
             'path' => 'new_folder',
@@ -226,6 +247,7 @@ class ThemeFoldersControllerTest extends BcTestCase
         $fullpath = BASER_PLUGINS . '/BcPluginSample/templates/';
         $data = [
             'theme' => 'BcFront',
+            'parent' => '/var/www/html/plugins/BcThemeSample/templates/layout/',
             'type' => 'Pages',
             'path' => '',
             'assets' => '',

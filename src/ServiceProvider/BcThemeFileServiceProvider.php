@@ -34,7 +34,7 @@ class BcThemeFileServiceProvider extends ServiceProvider
      * Provides
      * @var string[]
      */
-    protected $provides = [
+    protected array $provides = [
         ThemeFilesServiceInterface::class,
         ThemeFilesAdminServiceInterface::class,
         ThemeFoldersServiceInterface::class,
@@ -46,6 +46,7 @@ class BcThemeFileServiceProvider extends ServiceProvider
      * @param \Cake\Core\ContainerInterface $container
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function services($container): void
     {
