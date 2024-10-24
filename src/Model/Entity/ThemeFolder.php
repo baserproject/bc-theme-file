@@ -32,7 +32,7 @@ class ThemeFolder extends \Cake\ORM\Entity
      *
      * @var array
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         '*' => true,
         'id' => false
     ];
@@ -42,7 +42,7 @@ class ThemeFolder extends \Cake\ORM\Entity
      *
      * @var string[]
      */
-    protected $_virtual = [
+    protected array $_virtual = [
         'name',
         'path',
         'parent'
@@ -55,6 +55,7 @@ class ThemeFolder extends \Cake\ORM\Entity
      * @param array $options
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function __construct(array $properties = [], array $options = [])
     {
@@ -73,6 +74,7 @@ class ThemeFolder extends \Cake\ORM\Entity
      * @return array|mixed|string|string[]
      * @checked
      * @noTodo
+     * @unitTest
      */
     protected function _getName()
     {
