@@ -57,7 +57,7 @@ class BcThemeFileUtilTest extends BcTestCase
         $this->assertEquals($expected, $rs);
     }
 
-    public static function getTemplateTypeNameProvider()
+    public function getTemplateTypeNameProvider()
     {
 
         return [
