@@ -42,13 +42,6 @@ class ThemeFilesAdminService extends ThemeFilesService implements ThemeFilesAdmi
     protected $_tempalteTypes = [];
 
     /**
-     * Theme Folders Service
-     *
-     * @var ThemeFoldersServiceInterface
-     */
-    public $ThemeFoldersService;
-
-    /**
      * Constructor
      * @checked
      * @noTodo

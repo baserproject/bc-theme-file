@@ -307,10 +307,6 @@ class ThemeFoldersService extends BcThemeFileService implements ThemeFoldersServ
         } else {
             $themePath = Plugin::templatePath($theme) . $params['path'] . DS;
         }
-        // パストラバーサル対策(GHSA-2pj4-v76f-wjvx / GHSA-f6p8-29pq-8m9h):
-        // コピー先 $themePath は $params['type'] / $params['path'] から組み立てられ getFullpath() を
-        // 通らないため、コピー先がテーマディレクトリ配下であることを sink で必ず検証する。
-        $this->assertWithinThemeDir($themePath);
         (new BcFolder(dirname($themePath)))->create();
         $folder = new BcFolder($params['fullpath']);
         if ($folder->copy($themePath)) {
