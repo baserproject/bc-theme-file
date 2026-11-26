@@ -74,12 +74,8 @@ class ThemeFoldersController extends BcAdminApiController
         $allowMethod = [
             'delete' => __d('baser_core', '削除'),
         ];
+        if (!$this->validateBatchRequest($allowMethod, false)) return;
         $method = $this->getRequest()->getData('batch');
-        if (!isset($allowMethod[$method])) {
-            $this->setResponse($this->response->withStatus(500));
-            $this->viewBuilder()->setOption('serialize', []);
-            return;
-        }
         $targets = $this->getRequest()->getData('batch_targets');
         $errors = null;
         try {
@@ -97,8 +93,7 @@ class ThemeFoldersController extends BcAdminApiController
             );
             $message = __d('baser_core', '一括処理が完了しました。');
         } catch (\Throwable $e) {
-            $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
+            $message = $this->handleThrowable($e);
         }
         $this->set(['message' => $message, 'errors' => $errors]);
         $this->viewBuilder()->setOption('serialize', ['message', 'errors']);
@@ -123,8 +118,7 @@ class ThemeFoldersController extends BcAdminApiController
             $data['fullpath'] = $service->getFullpath($data['theme'], $data['plugin'], $data['type'], $data['path']);
             $themeFiles = $service->getIndex($data);
         } catch (\Throwable $e) {
-            $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
+            $message = $this->handleThrowable($e);
         }
 
         $this->set([
@@ -160,8 +154,7 @@ class ThemeFoldersController extends BcAdminApiController
             $message = __d('baser_core', '入力エラーです。内容を修正してください。');
             $errors = $e->getEntity()->getErrors();
         } catch (\Throwable $e) {
-            $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
+            $message = $this->handleThrowable($e);
         }
 
         $this->set([
@@ -198,8 +191,7 @@ class ThemeFoldersController extends BcAdminApiController
             $message = __d('baser_core', '入力エラーです。内容を修正してください。');
             $errors = $e->getEntity()->getErrors();
         } catch (\Throwable $e) {
-            $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
+            $message = $this->handleThrowable($e);
         }
 
         $this->set([
@@ -234,8 +226,7 @@ class ThemeFoldersController extends BcAdminApiController
                 $message = __d('baser_core', 'フォルダ「{0}」の削除に失敗しました。', $data['path']);
             }
         } catch (\Throwable $e) {
-            $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
+            $message = $this->handleThrowable($e);
         }
 
         $this->set([
@@ -270,8 +261,7 @@ class ThemeFoldersController extends BcAdminApiController
                 $message = __d('baser_core', 'フォルダ「{0}」のコピーに失敗しました。上位フォルダのアクセス権限を見直してください。。', $data['path']);
             }
         } catch (\Throwable $e) {
-            $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
+            $message = $this->handleThrowable($e);
         }
 
         $this->set([
@@ -308,8 +298,7 @@ class ThemeFoldersController extends BcAdminApiController
             );
             $this->BcMessage->setSuccess($message, true, false);
         } catch (\Throwable $e) {
-            $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser_core', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
+            $message = $this->handleThrowable($e);
         }
 
         $this->set([
